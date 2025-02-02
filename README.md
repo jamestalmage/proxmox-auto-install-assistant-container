@@ -13,7 +13,7 @@ The resulting image has wget installed.
 docker container run -it -v ${PWD}:/output jamestalmage/proxmox-auto-install-assistant bash
 ```
 
-### Use as the for your own image
+### Use as the base for your own image
 
 ```dockerfile
 FROM jamestalmage/proxmox-auto-install-assistant
