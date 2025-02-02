@@ -7,6 +7,7 @@ RUN apt-get update -y \
           ca-certificates \
     && update-ca-certificates \
     && apt-get remove -y ca-certificates \
+    && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
