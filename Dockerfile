@@ -6,7 +6,7 @@ RUN apt-get update -y \
           wget \
           ca-certificates \
     && update-ca-certificates \
-    && apt-get remove update-ca-certificates \
+    && apt-get remove -y ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
