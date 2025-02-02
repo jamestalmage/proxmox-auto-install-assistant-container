@@ -1,10 +1,10 @@
-### Proxmox 
+## Proxmox 
 
 Provides a Debian base image with [proxmox-auto-install-assistant](https://pve.proxmox.com/wiki/Automated_Installation#Assistant_Tool) installed.
 
+The resulting image has wget installed
 
-
-# Usage
+### Usage
 
 ```dockerfile
 FROM jamestalmage/proxmox-auto-install-assistant

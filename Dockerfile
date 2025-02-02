@@ -5,7 +5,10 @@ RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
           wget \
           ca-certificates \
-    && update-ca-certificates
+    && update-ca-certificates \
+    && apt-get remove update-ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install the proxmox-auto-install-assistant
 RUN . /etc/os-release \
@@ -16,7 +19,9 @@ RUN . /etc/os-release \
     && apt-get update -y \
     && apt-get install -y --no-install-recommends  \
         proxmox-auto-install-assistant \
-        xorriso
+        xorriso \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 LABEL maintainer="James Talmage <james@talmage.io>"
 LABEL org.opencontainers.image.source=https://github.com/jamestalmage/proxmox-auto-install-assistant-container
