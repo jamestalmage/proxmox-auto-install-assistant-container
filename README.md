@@ -1,4 +1,4 @@
-## [proxmox-auto-install-assistant](https://github.com/jamestalmage/proxmox-auto-install-assistant-container) 
+## [jamestalmage/proxmox-auto-install-assistant](https://github.com/jamestalmage/proxmox-auto-install-assistant-container) 
 
 Provides a Debian base image with [proxmox-auto-install-assistant](https://pve.proxmox.com/wiki/Automated_Installation#Assistant_Tool) installed.
 
