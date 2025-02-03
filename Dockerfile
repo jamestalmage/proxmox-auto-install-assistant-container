@@ -2,11 +2,11 @@ FROM debian:12.9-slim
 
 # Update CA certificates (wget was failing on Lets Encrypt certs without this)
 RUN <<EOF
+set -eu
 apt-get update -y
 apt-get install -y --no-install-recommends \
           wget \
           ca-certificates
-update-ca-certificates
 apt-get remove -y ca-certificates
 apt-get autoremove -y
 apt-get clean
@@ -15,13 +15,14 @@ EOF
 
 # Install the proxmox-auto-install-assistant
 RUN <<EOF
+set -eu
 . /etc/os-release
 wget "https://enterprise.proxmox.com/debian/proxmox-release-${VERSION_CODENAME}.gpg" \
       -O "/etc/apt/trusted.gpg.d/proxmox-release-${VERSION_CODENAME}.gpg"
 echo "deb [arch=amd64] http://download.proxmox.com/debian/pve ${VERSION_CODENAME} pve-no-subscription" > \
       /etc/apt/sources.list.d/pve-install-repo.list
 apt-get update -y
-apt-get install -y --no-install-recommends
+apt-get install -y --no-install-recommends \
         proxmox-auto-install-assistant \
         xorriso
 apt-get clean
