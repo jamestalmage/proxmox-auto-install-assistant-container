@@ -50,7 +50,7 @@ jobs:
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
           flavor: |
-            suffix=${{ matrix.base-image.image-tag }},onlatest=true
+            suffix=-${{ matrix.base-image.image-tag }},onlatest=true
           images: ${{env.DOCKER_NAMESPACE}}/${{env.DOCKER_REPO_NAME}}
 
       - name: Build and push Docker image
