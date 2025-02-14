@@ -20,13 +20,19 @@ env:
 
 jobs:
   push_to_registry:
-    name: Push Docker image to Docker Hub
+    name: Push ${{ matrix.base-image }} image to Docker Hub
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
       attestations: write
       id-token: write
+    strategy:
+      matrix:
+        base-image:
+          - debian:12.9-slim
+          - node:22-bookworm
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -49,8 +55,10 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          build-args: |
+            BASE_IMAGE=${{ matrix.base-image }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ matrix.base-image }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
@@ -60,6 +68,11 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
+  push_readme:
+    name: Push README to Dockerhub
+    runs-on: ubuntu-latest
+    needs: push_to_registry
+    steps:
       - name: push README to Dockerhub
         uses: christian-korneck/update-container-description-action@d36005551adeaba9698d8d67a296bd16fa91f8e8
         env:
