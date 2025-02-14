@@ -20,7 +20,7 @@ env:
 
 jobs:
   push_to_registry:
-    name: Push ${{ matrix.base-image }} image to Docker Hub
+    name: Push ${{ matrix.base-image.image-tag }} image to Docker Hub
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -30,8 +30,10 @@ jobs:
     strategy:
       matrix:
         base-image:
-          - debian:12.9-slim
-          - node:22-bookworm
+          - image-name: debian:12.9-slim
+            image-tag: debian-12.9-slim
+          - image-name: node:22-bookworm
+            image-tag: node-22-bookworm
 
     steps:
       - name: Check out the repo
@@ -47,6 +49,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
+          flavor: |
+            suffix=${{ matrix.base-image.image-tag }},onlatest=true
           images: ${{env.DOCKER_NAMESPACE}}/${{env.DOCKER_REPO_NAME}}
 
       - name: Build and push Docker image
@@ -56,9 +60,9 @@ jobs:
           context: .
           file: ./Dockerfile
           build-args: |
-            BASE_IMAGE=${{ matrix.base-image }}
+            BASE_IMAGE=${{ matrix.base-image.image-name }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-${{ matrix.base-image }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
