@@ -1,4 +1,5 @@
-FROM debian:12.9-slim
+ARG BASE_IMAGE=debian:12.9-slim
+FROM --platform=linux/amd64 $BASE_IMAGE
 
 # Update CA certificates (wget was failing on Lets Encrypt certs without this)
 RUN <<EOF
