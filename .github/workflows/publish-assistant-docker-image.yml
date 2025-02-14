@@ -77,6 +77,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: push_to_registry
     steps:
+      - name: Check out the repo
+      - uses: actions/checkout@v4
       - name: push README to Dockerhub
         uses: christian-korneck/update-container-description-action@d36005551adeaba9698d8d67a296bd16fa91f8e8
         env:
