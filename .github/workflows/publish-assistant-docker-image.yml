@@ -64,9 +64,9 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ matrix.base-image.image-name }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags:
-            - ${{ steps.meta.outputs.tags }}
-            - ${{ matrix.base-image.add-latest }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ matrix.base-image.add-latest }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
