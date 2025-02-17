@@ -32,8 +32,10 @@ jobs:
         base-image:
           - image-name: debian:12.9-slim
             image-tag: debian-12.9-slim
+            add-latest: true
           - image-name: node:22-bookworm
             image-tag: node-22-bookworm
+            add-latest: false
 
     steps:
       - name: Check out the repo
@@ -62,7 +64,9 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ matrix.base-image.image-name }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ matrix.base-image.add-latest }} && "latest"
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
