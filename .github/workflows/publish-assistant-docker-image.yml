@@ -52,9 +52,12 @@ jobs:
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
           flavor: |
-            latest=${{ matrix.base-image.add-latest }},
             suffix=-${{ matrix.base-image.image-tag }},onlatest=false
           images: ${{env.DOCKER_NAMESPACE}}/${{env.DOCKER_REPO_NAME}}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable=${{ matrix.base-image.add-latest }}
+            
 
       - name: Build and push Docker image
         id: push
