@@ -32,10 +32,10 @@ jobs:
         base-image:
           - image-name: debian:12.9-slim
             image-tag: debian-12.9-slim
-            add-latest: "latest"
+            add-latest: true
           - image-name: node:22-bookworm
             image-tag: node-22-bookworm
-            add-latest: None
+            add-latest: false
 
     steps:
       - name: Check out the repo
@@ -52,7 +52,8 @@ jobs:
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
         with:
           flavor: |
-            suffix=-${{ matrix.base-image.image-tag }},onlatest=true
+            latest=${{ matrix.base-image.add-latest }},
+            suffix=-${{ matrix.base-image.image-tag }},onlatest=false
           images: ${{env.DOCKER_NAMESPACE}}/${{env.DOCKER_REPO_NAME}}
 
       - name: Build and push Docker image
@@ -64,9 +65,7 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ matrix.base-image.image-name }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            ${{ matrix.base-image.add-latest }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
