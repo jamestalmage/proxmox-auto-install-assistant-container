@@ -30,9 +30,12 @@ jobs:
     strategy:
       matrix:
         base-image:
+          - image-name: debian:trixie-slim
+            image-tag: debian-trixie-slim
+            add-latest: true
           - image-name: debian:12.9-slim
             image-tag: debian-12.9-slim
-            add-latest: true
+            add-latest: false
           - image-name: node:22-bookworm
             image-tag: node-22-bookworm
             add-latest: false
