@@ -23,6 +23,7 @@ tar cf - -C /tmp/pve_iso_tmp . | tar xfp - -C /tmp/pve_iso
 fakeroot -- bash -c "
 unsquashfs -d /tmp/pve_squash/ /tmp/pve_iso/pve-installer.squashfs
 sed -i -e 's/timeout 10;/timeout 60;/g' /tmp/pve_squash/etc/dhcp/dhclient.conf
+sed -i -e 's/select-timeout 0;/select-timeout 20;/g' /tmp/pve_squash/etc/dhcp/dhclient.conf
 echo \"new dhclient.conf:\"
 echo \"\"
 cat /tmp/pve_squash/etc/dhcp/dhclient.conf
