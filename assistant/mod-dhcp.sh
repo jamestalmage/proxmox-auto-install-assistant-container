@@ -7,9 +7,8 @@
 
 # create a temporary file
 TEMP_FILE=$(mktemp).iso
-
-#copy into proxmox.mbr the mbr from original iso (first 512byte)
-dd if=$1 bs=512 count=1 of=/tmp/proxmox.mbr
+FILE="/tmp/pve_iso/pve-installer.squashfs"
+TARGET="/pve-installer.squashfs"
 
 #  create temp folders
 mkdir /tmp/pve_iso
@@ -30,18 +29,12 @@ cat /tmp/pve_squash/etc/dhcp/dhclient.conf
 rm /tmp/pve_iso/pve-installer.squashfs
 mksquashfs /tmp/pve_squash/ /tmp/pve_iso/pve-installer.squashfs"
 
-xorriso -as mkisofs \
--o "$TEMP_FILE" \
--r -V 'PVE' \
--isohybrid-mbr /tmp/proxmox.mbr \
--partition_offset 16 \
---protective-msdos-label \
-/tmp/pve_iso
+rm $2
 
-echo "Copying the modified iso from temp location to $2"
-cp "$TEMP_FILE" "$2"
+xorriso -boot_image any keep \
+    -dev "$1" \
+    -outdev "$2" \
+    -map "$FILE" "$TARGET"
 
 # # clear up your files
 rm -rf /tmp/pve_*
-rm /tmp/proxmox.mbr
-rm "$TEMP_FILE"
